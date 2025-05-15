@@ -1,0 +1,50 @@
+{
+
+    "name": "spotify-clone",
+
+    "version": "1.0.0",
+
+    "description": "A Spotify clone using Node.js, Express, EJS, and PostgreSQL",
+
+    "main": "app.js",
+
+    "type": "module",
+
+    "scripts": {
+
+        "start": "node app.js"
+
+    },
+
+    "dependencies": {
+
+        "axios": "^1.4.0",
+
+        "body-parser": "^1.20.2",
+
+        "dotenv": "^10.0.0",
+
+        "ejs": "^3.1.6",
+
+        "express": "^4.17.1",
+
+        "express-session": "^1.18.1",
+
+        "multer": "^1.4.5-lts.1",
+
+        "passport": "^0.7.0",
+
+        "passport-local": "^1.0.0",
+
+        "pg": "^8.13.0"
+
+    },
+
+    "keywords": [],
+
+    "author": "",
+
+    "license": "ISC"
+
+}
+
