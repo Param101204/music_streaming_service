@@ -17,8 +17,8 @@ import userDeletesSongsRoute from './routes/userDeletesSongsRoute.js';
 const app = express();
 const port = 3000;
 
-import db from './models/db.js';
-db.connect();
+// import db from './models/db.js';
+// db.connect();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
