@@ -1,21 +1,53 @@
-// models/userModel.js
+// userService.js
+import db from './db.js';
 
-import db from './db.js';  // Assuming you have a db connection
-// Export each function you want to use in other files
 export const findUserByEmail = async (email) => {
-  return await db.query("SELECT * FROM users WHERE email_id = $1", [email]);
+    const { data, error } = await db
+        .from('users')
+        .select('*')
+        .eq('email_id', email);
+
+    if (error) throw error;
+    return data;
 };
 
 export const createUser = async (username, email, password, dob) => {
-  return await db.query("INSERT INTO users(username, email_id, password, dob) VALUES ($1, $2, $3, $4)", [username, email, password, dob]);
+    const { data, error } = await db
+        .from('users')
+        .insert([
+            {
+                username: username,
+                email_id: email,
+                password: password,
+                dob: dob
+            }
+        ]);
+
+    if (error) throw error;
+    return data;
 };
 
 export const currentUser = async () => {
-  return await db.query("SELECT * FROM users ORDER BY user_id DESC LIMIT 1");
+    const { data, error } = await db
+        .from('users')
+        .select('*')
+        .order('user_id', { ascending: false })
+        .limit(1);
+
+    if (error) throw error;
+    return data;
 };
 
 export const insertPhones = async (userID, phones) => {
-  for (let i = 0; i < phones.length; i++) {
-    await db.query("INSERT INTO mobile_numbers(user_id, mobile_no) VALUES ($1, $2)", [userID, phones[i]]);
-  }
+    const rows = phones.map(phone => ({
+        user_id: userID,
+        mobile_no: phone
+    }));
+
+    const { data, error } = await db
+        .from('mobile_numbers')
+        .insert(rows);
+
+    if (error) throw error;
+    return data;
 };

@@ -1,17 +1,54 @@
+// songService.js
 import db from './db.js';
 
 export const getSongs = async (song_name, album_name) => {
-    return await db.query('SELECT song_id, track_id, track_name, album_name, duration, rating, genre FROM songs WHERE LOWER(track_name) ILIKE LOWER($1) OR LOWER(album_name) ILIKE LOWER($2)', [song_name, album_name]);
-}
+    const { data, error } = await db
+        .from('songs')
+        .select('song_id, track_id, track_name, album_name, duration, rating, genre')
+        .or(`track_name.ilike.%${song_name}%,album_name.ilike.%${album_name}%`);
+
+    if (error) throw error;
+    return data;
+};
 
 export const getSongsById = async (id) => {
-    return await db.query('SELECT * FROM songs WHERE song_id = ($1)', [id]);
-}
+    const { data, error } = await db
+        .from('songs')
+        .select('*')
+        .eq('song_id', id);
 
-export const getSongsByArtist = async(artist) => {
-    return await db.query('SELECT * FROM songs WHERE song_id IN (SELECT song_id FROM artists WHERE LOWER(song_artists) ILIKE LOWER($1))', [artist]);
-}
+    if (error) throw error;
+    return data;
+};
 
-export const getSongsByAlbum = async(album) => {
-    return await db.query('SELECT * FROM songs WHERE LOWER(album_name) ILIKE LOWER($1)', [album]);
-}
+export const getSongsByArtist = async (artist) => {
+    // First, get song_ids from artists table
+    const { data: artistData, error: artistError } = await db
+        .from('artists')
+        .select('song_id')
+        .ilike('song_artists', `%${artist}%`);
+
+    if (artistError) throw artistError;
+
+    const songIds = artistData.map(row => row.song_id);
+
+    if (songIds.length === 0) return [];
+
+    const { data, error } = await db
+        .from('songs')
+        .select('*')
+        .in('song_id', songIds);
+
+    if (error) throw error;
+    return data;
+};
+
+export const getSongsByAlbum = async (album) => {
+    const { data, error } = await db
+        .from('songs')
+        .select('*')
+        .ilike('album_name', `%${album}%`);
+
+    if (error) throw error;
+    return data;
+};
