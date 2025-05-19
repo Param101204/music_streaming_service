@@ -2,12 +2,13 @@
 import db from './db.js';
 
 export const findUserByEmail = async (email) => {
-    const { data, error } = await db
-        .from('users')
-        .select('*')
-        .eq('email_id', email);
+    const { data, error } = await db.from('users').select('*').eq('email_id', email);
 
-    if (error) throw error;
+    if (error) {
+        console.error("Supabase error:", error);
+        throw new Error(error.message || JSON.stringify(error));
+    }
+
     return data;
 };
 

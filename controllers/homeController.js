@@ -5,7 +5,7 @@ export const renderHome = async(req, res) => {
         return res.redirect('/login'); // Redirect to login if session data is missing
     }
     const userPlaylists = await getPlaylists(req.session.user_id);
-    res.render('index.ejs', {username: req.session.username, playlists: userPlaylists.rows})
+    res.render('index.ejs', {username: req.session.username, playlists: userPlaylists})
 }
 
 export const searchHome = async(req, res) => {

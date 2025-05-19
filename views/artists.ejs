@@ -15,8 +15,8 @@
             No Such Artist Exists.
         <% } else { %>
             <div class="artist-info">
-                <img src="<%= image.rows[0].artists_images %>" alt="Artist's Image">
-                <% console.log(image.rows[0].artists_images) %>
+                <img src="<%= image[0].artists_images %>" alt="Artist's Image">
+                <% console.log(image[0].artists_images) %>
                 <p class = "album-title"><%= artistName %></p>
             </div>
         <% } %>
