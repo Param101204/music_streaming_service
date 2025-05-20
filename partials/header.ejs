@@ -1,0 +1,99 @@
+<!-- header.ejs -->
+<header class="header-bar">
+  <div class="home-btn">
+    <a href = "http://localhost:3000/home">
+    <img src = "https://cdn-icons-png.flaticon.com/128/14035/14035684.png">
+    </a>
+  </div>
+    <form method = "POST">
+        <div class="search-bar">
+            <input type="text" name = "search" placeholder="Search">
+        </div>
+    </form>
+    
+    <div class="title">
+      <% if (locals.username) { %>
+       <h3>Welcome <%= username %>, to Topsify</h3>
+      <% } %>
+    </div>
+    <div class="add-btn">
+      <img
+        src="https://cdn-icons-png.flaticon.com/128/10015/10015328.png"
+        alt="Create A Playlist"
+        id="addPlaylistImg"
+        style="cursor: pointer;"
+      />
+    </div>
+    
+    <!-- Playlist Modal -->
+    <div id="playlistModal" class="modal">
+      <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <form id="playlistForm">
+          <label for="playlistName">Playlist Name:</label>
+          <input type="text" id="playlistName" name="playlistName" required />
+    
+          <!-- <label for="songs">Add Songs (Optional):</label>
+          <select id="songs" name="songs" multiple>
+            <%# songs.forEach(song => { %>
+              <option value="<%#= song.id %>"><%#= song.name %></option>
+            <%# }) %>
+          </select> -->
+    
+          <button type="submit">Create Playlist</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      const modal = document.getElementById("playlistModal");
+      const img = document.getElementById("addPlaylistImg");
+      const close = document.getElementById("closeModal");
+    
+      // Show the modal when the image is clicked
+      img.onclick = function () {
+        modal.style.display = "block";
+      };
+    
+      // Close the modal when the close button is clicked
+      close.onclick = function () {
+        modal.style.display = "none";
+      };
+    
+      // Close the modal if the user clicks outside the modal content
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+    
+      // AJAX Form Submission
+      const form = document.getElementById("playlistForm");
+      form.onsubmit = async function (e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const formObject = {};
+        formData.forEach((value, key) => {
+          formObject[key] = value;
+        });
+      
+        console.log("Form data:", formObject); 
+        const response = await fetch("/create/add", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          alert("Playlist created successfully!");
+          modal.style.display = "none";
+    
+          // Optionally reload the song list or update the UI dynamically
+        } else {
+          alert("Error creating playlist.");
+        }
+      };
+    </script>
+        
+    <div class="show-all-btn">
+      <button>Show All Playlists</button>
+    </div>
+</header>
