@@ -24,7 +24,7 @@ export const search = async(req, res) => {
         // console.log(artists)
         // const artists = await db.query('SELECT * FROM artists WHERE song_id IN (SELECT song_id FROM songs WHERE LOWER(song_name) ILIKE LOWER($1) OR LOWER(song_name) ILIKE LOWER($2))', [match, match])
         if(search.length === 0 && artists.length === 0) {
-            res.render('search.ejs', {data: map, len: map.size})
+            res.render('search.ejs', {data: map, len: map.size, query: text})
         } else if(artists.length === 0) { 
             for ( var i = 0 ; i < search.length; i ++ ) {
                 const curr = search[i]
