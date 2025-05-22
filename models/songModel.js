@@ -26,7 +26,7 @@ export const getSongsByArtist = async (artist) => {
     const { data: artistData, error: artistError } = await db
         .from('artists')
         .select('song_id')
-        .ilike('song_artists', `${artist}`);
+        .ilike('song_artists', `%${artist}%`);
 
     if (artistError) throw artistError;
     // console.log(artistData);
@@ -45,7 +45,7 @@ export const getSongsByArtist = async (artist) => {
 };
 
 export const getSongsByAlbum = async (album) => {
-    const { data, error } = await db.from('songs').select('*').ilike('album_name', `${album}`);
+    const { data, error } = await db.from('songs').select('*').ilike('album_name', `%${album}%`);
     if (error) throw error;
     // console.log(data)
     return data;
