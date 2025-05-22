@@ -49,7 +49,7 @@ app.use('/add-to-playlists', userInsertsSongs);
 app.use('/user-playlists', userPlaylistRoute);
 app.use('/deleteSong', userDeletesSongsRoute);
 app.use('/search-by-artist', searchByArtistRoute);
-app.use('/search-by-name', searchByNameRoute);
+app.use('/search-by-song', searchByNameRoute);
 app.use('/search-by-album', searchByAlbumRoute);
 // app.use('/search-by-genre', searchByGenreRoute);
 app.listen(port, () => {console.log(`Server running on http://localhost:${port}`);});
