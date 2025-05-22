@@ -13,7 +13,7 @@ export const artistController = async(req, res) => {
         const imageToSend = await getArtistImage(artistName);
         const map = new Map();
         const artistSongs = await getSongsByArtist(artistName);
-        console.log(artistSongs);
+        //(artistSongs);
         for ( var i = 0 ; i < artistSongs.length; i ++ ) {
             const curr = artistSongs[i]
             const curr_id = curr.song_id

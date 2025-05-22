@@ -5,12 +5,12 @@ export const insertPlaylists = async(req, res) => {
     if (!req.session.username) {
         return res.redirect('/login'); // Redirect to login if session data is missing
     }
-    console.log(req.body);
+    //(req.body);
     const songToAdd_id = req.body.song_id;
     const playlistsInfo = req.body.playlists;
-    console.log('Inside the Route');
-    console.log(songToAdd_id);
-    console.log(playlistsInfo);
+    //('Inside the Route');
+    //(songToAdd_id);
+    //(playlistsInfo);
     try {
         for ( var i = 0 ; i < playlistsInfo.length ; i ++ ) {
             await insertSongsToPlaylist(playlistsInfo[i].playlist_id, playlistsInfo[i].playlist_name, songToAdd_id);

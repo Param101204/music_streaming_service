@@ -5,7 +5,7 @@ export const renderSearchByName = async (req, res) => {
     if(!req.session.username) {
         return res.redirect('/login');
     }
-    const data = new Map();
+    const map = new Map();
     const text = req.params.name;
     const search = await getSongsByName(text);
     const playlists = await getPlaylists(req.session.user_id);

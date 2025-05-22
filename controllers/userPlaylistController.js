@@ -21,7 +21,7 @@ export const renderUserPlaylist = async(req, res) => {
             res.render('playlists.ejs', {data: map, len: 0, username: req.session.username, playlistImage: default_image})
         } else {
             const song_ids = await getSongsFromUserPlaylist(playlist[0].playlist_id, playlistName);
-            console.log(song_ids);
+            //(song_ids);
             const songs = []
             for (const songId of song_ids) {
                 // console.log(song_id.song_id);

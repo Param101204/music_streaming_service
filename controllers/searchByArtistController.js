@@ -10,7 +10,7 @@ export const searchByArtist = async(req, res) => {
     const artistQuery = await getArtists(text);
     const playlists = await getPlaylists(req.session.user_id);
     if(artistQuery.length === 0) {
-        return res.render('search.ejs', {data: data, len: data.size, username: req.session.username, message: "No results found"});
+        return res.render('search.ejs', {data: data, len: data.size, username: req.session.username, query: text, message: "No results found"});
     } else {
         for (var i = 0 ; i < artistQuery.length ; i ++) {
             const curr_id = artistQuery[i].song_id
