@@ -41,7 +41,7 @@ export const search = async(req, res) => {
                     map.set(curr_id, {song_name : curr.track_name, album_name: curr.album_name, genre: curr.genre, spotify_code: curr.track_id, album_name: curr.album_name, duration: curr.duration, rating: curr.rating, artist: artists_, image: imageToSend})
                 }
             }
-            res.render('search.ejs', {data: map, len: map.size, username: req.session.username, playlists: playlists});
+            res.render('search.ejs', {data: map, len: map.size, username: req.session.username, playlists: playlists, query: text});
             // res.redirect('/search');
         } else if(search.length === 0) {
 
@@ -64,7 +64,7 @@ export const search = async(req, res) => {
                     }
                 }       
             }
-            res.render('search.ejs', {data: map, len: map.size, username: req.session.username, playlists: playlists});
+            res.render('search.ejs', {data: map, len: map.size, username: req.session.username, playlists: playlists, query: text});
             // res.redirect('/search');
         } else {
             var imageToSend = default_image;
@@ -104,7 +104,7 @@ export const search = async(req, res) => {
                     }
                 }       
             }
-            res.render('search.ejs', {data: map, len: map.size, username: req.session.username, playlists: playlists});
+            res.render('search.ejs', {data: map, len: map.size, username: req.session.username, playlists: playlists, query: text});
         }
         // res.redirect(`/search/${encodeURIComponent(text)}`);
     } catch (err) {

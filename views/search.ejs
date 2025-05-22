@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spotify Clone</title>
+  <title>Topsify | Search</title>
   <link rel="stylesheet" href="/styles/search_style.css">
 </head>
 <body>
@@ -17,9 +17,32 @@
         No Items Match Your Search.
       <% } else { %>
         <%= len %> Results matched your Search.
+        <% if (len > 100) { %>
+            Showing Top 100 of them.
+        <% } %>
       <% } %>
     </div>
-
+    <% const artistURL = "https://topsify.onrender.com/search-by-artist/" %>
+    <% const albumURL = "https://topsify.onrender.com/search-by-album/" %>
+    <% const songURL = "https://topsify.onrender.com/search-by-song/" %>
+    <div class="search">
+      <div class="search-item">
+        <% console.log(locals.query) %>
+        <a href = "<%= artistURL + encodeURIComponent(query) %>">
+          <button class ="search-button">Filter by Artist</button>
+        </a>
+      </div>
+    <div class="search-item">
+        <a href = "<%= albumURL + encodeURIComponent(query) %>">
+          <button class ="search-button">Filter by Album</button>
+        </a>
+      </div>
+      <div class="search-item">
+        <a href = "<%= songURL + encodeURIComponent(query) %>">
+          <button class ="search-button">Filter by Song Name</button>
+        </a>
+      </div>
+    </div>
     <!-- Grid Content -->
     <div class="grid-container">
       <!-- Column Headers -->
@@ -35,6 +58,8 @@
       <% const song_ids = [] %>
       <% data.forEach((keys, values) => { %>
         <!-- Serial No and Image -->
+         <% if (i <= 100) { %>
+         
          <% song_ids.push(values) %>
          <%# console.log(values) %>
         <div class="grid-item text-column">
@@ -80,8 +105,8 @@
 
         <!-- Duration -->
         <div class="grid-item text-column">
-          <% const duration = keys.duration || { minutes: 0, seconds: 0 }; %>
-          <p><%= duration.minutes %> : <%= String(duration.seconds).padStart(2, '0') %></p>
+          <%= keys.duration %>
+          <!-- <p></p> -->
         </div>
 
         <!-- Add to Playlist & Spotify Link -->
@@ -119,7 +144,9 @@
                  alt="Spotify Icon" class="spotify-icon">
           </a>
         </div>
+        <% } %>
       <% }) %>
+
     </div>
   </div>
 
@@ -186,7 +213,7 @@
               body: JSON.stringify(payload)
             });
       
-            const data = await response.json();
+            //const data = await response.json();
             alert("Song successfully added to playlists!");
           } catch (error) {
             console.error("Fetch error:", error);
@@ -196,7 +223,8 @@
           modal.style.display = 'none';
         });
       });
-    });      
+    });     
+    
   </script>
 </body>
 </html>

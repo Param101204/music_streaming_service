@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spotify Clone</title>
+  <title>Topsify | Playlists</title>
   <link rel="stylesheet" href="/styles/search_style.css">
 </head>
 <body>
@@ -74,7 +74,7 @@
                     By-
                     <% for (var j = 0; j < keys.artist.length; j++) { %>
                         <% if (j < 2) { %> <!-- Show only first 2 artists -->
-                            <a href="http://localhost:3000/artists/<%= encodeURIComponent(keys.artist[j]) %>" class="artist-name">
+                            <a href="https://topsify.onrender.com/artists/<%= encodeURIComponent(keys.artist[j]) %>" class="artist-name">
                                 <%= keys.artist[j] %>
                             </a>
                             <% if (j === 0 && keys.artist.length > 1) { %>, <% } %> <!-- Add comma after first artist -->
@@ -85,7 +85,7 @@
                     <% if (keys.artist.length > 2) { %>
                         <span class="hidden-artist-full">
                             <% for (var k = 2; k < keys.artist.length; k++) { %>
-                                , <a href="http://localhost:3000/artists/<%= encodeURIComponent(keys.artist[k]) %>" class="artist-name">
+                                , <a href="https://topsify.onrender.com/artists/<%= encodeURIComponent(keys.artist[k]) %>" class="artist-name">
                                     <%= keys.artist[k] %>
                                 </a>
                             <% } %>
@@ -135,7 +135,7 @@
         console.log("onclick");
         console.log(songid);
         console.log(playlistID);
-        const url =  `http://localhost:3000/deleteSong/${songid}-${playlistID}`;
+        const url =  `https://topsify.onrender.com/deleteSong/${songid}-${playlistID}`;
         console.log(url)
         fetch(url, {
             method: 'DELETE',

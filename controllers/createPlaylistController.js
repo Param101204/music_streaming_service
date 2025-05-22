@@ -10,8 +10,11 @@ export const addUserPlaylist = async (req, res) => {
   const { playlistName } = req.body;
 //   const songs = req.body.songs; // Will be an array if multiple songs are selected
   const id = req.session.user_id;
-  console.log("ID: ", id);
-  console.log("Name: ", playlistName);
+  if (!playlistName) {
+    return res.status(400).send("Playlist name is required.");
+  }
+  // console.log("ID: ", id);
+  // console.log("Name: ", playlistName);
   try {
     // Insert playlist into the database
     const playlist = await createUserPlaylist(id, playlistName);
@@ -28,7 +31,7 @@ export const addUserPlaylist = async (req, res) => {
     //   }
     // }
 
-    res.status(200).send("Playlist created successfully!");
+    return res.redirect("/home"); 
   } catch (error) {
     console.error("Error adding playlist:", error);
     res.status(500).send("Error creating playlist.");

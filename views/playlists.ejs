@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spotify Clone</title>
+  <title>Topsify | Playlists</title>
   <link rel="stylesheet" href="/styles/search_style.css">
 </head>
 <body>
@@ -31,9 +31,9 @@
                 <% let formattedMinutes = minutes.toString().padStart(2, '0'); %>
                 <% let formattedSeconds = seconds.toString().padStart(2, '0'); %>
                 <br>
-                <p class = "duration"> Duration: <%= formattedHours %> : <%= formattedMinutes %> : <%= formattedSeconds %> </p>
+                
                 <br>
-                <p class = "countSongs"> Total Songs: <%= countOfSongs%> </p>
+                <p class = "countSongs"> Total Songs: <%= countOfSongs %> </p>
             </div>
         <% } %>
     </div>
@@ -84,7 +84,7 @@
                     By-
                     <% for (var j = 0; j < keys.artist.length; j++) { %>
                         <% if (j < 2) { %> <!-- Show only first 2 artists -->
-                            <a href="http://localhost:3000/artists/<%= encodeURIComponent(keys.artist[j]) %>" class="artist-name">
+                            <a href="https://topsify.onrender.com/artists/<%= encodeURIComponent(keys.artist[j]) %>" class="artist-name">
                                 <%= keys.artist[j] %>
                             </a>
                             <% if (j === 0 && keys.artist.length > 1) { %>, <% } %> <!-- Add comma after first artist -->
@@ -95,7 +95,7 @@
                     <% if (keys.artist.length > 2) { %>
                         <span class="hidden-artist-full">
                             <% for (var k = 2; k < keys.artist.length; k++) { %>
-                                , <a href="http://localhost:3000/artists/<%= encodeURIComponent(keys.artist[k]) %>" class="artist-name">
+                                , <a href="https://topsify.onrender.com/artists/<%= encodeURIComponent(keys.artist[k]) %>" class="artist-name">
                                     <%= keys.artist[k] %>
                                 </a>
                             <% } %>
@@ -113,14 +113,7 @@
             </div>
             <!-- duration -->
             <div class="grid-item text-column">
-                <% const parsed = JSON.parse(JSON.stringify(keys.duration)) %>
-                <% let minutes = parsed.minutes !== undefined ? parsed.minutes : 0; %>
-                <% let seconds = parsed.seconds !== undefined ? parsed.seconds : 0; %>
-                
-                <% let formattedSeconds = seconds.toString().padStart(2, '0'); %>
-            
-                <p> <%= minutes %> : <%= formattedSeconds %></p> 
-            
+                <p> <%= keys.duration %></p>
             </div>
    <!-- Add to Playlist & Spotify Link -->
    <div class="grid-item">
@@ -207,7 +200,7 @@ document.querySelectorAll('[id^="playlistForm-"]').forEach(form => {
         return { playlist_id: playlistId, playlist_name: playlistName };
       });
 
-    console.log("Selected Playlists:", selectedPlaylists);
+    //console.log("Selected Playlists:", selectedPlaylists);
 
     const payload = {
       song_id: songId,

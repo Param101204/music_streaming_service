@@ -1,35 +1,45 @@
 <!-- header.ejs -->
 <header class="header-bar">
-  <div class="home-btn">
-    <a href = "http://localhost:3000/home">
-    <img src = "https://cdn-icons-png.flaticon.com/128/14035/14035684.png">
-    </a>
-  </div>
-    <form method = "POST">
-        <div class="search-bar">
-            <input type="text" name = "search" placeholder="Search">
-        </div>
-    </form>
-    
-    <div class="title">
-      <% if (locals.username) { %>
-       <h3>Welcome <%= username %>, to Topsify</h3>
-      <% } %>
+  <!-- Group 1: Home + Search -->
+  <div class="header-left">
+    <div class="home-btn">
+      <a href="https://topsify.onrender.com/home">
+        <img src="https://cdn-icons-png.flaticon.com/128/14035/14035684.png" alt="Home" />
+      </a>
     </div>
+    <form method="POST" class="search-form">
+      <input type="text" name="search" placeholder="Search" />
+    </form>
+  </div>
+
+  <!-- Group 2: Welcome Message -->
+  <div class="header-center">
+    <% if (locals.username) { %>
+      <h3>Welcome <%= username %>, to Topsify</h3>
+    <% } %>
+  </div>
+
+  <!-- Group 3: Create Playlist + Show All -->
+  <div class="header-right">
     <div class="add-btn">
       <img
         src="https://cdn-icons-png.flaticon.com/128/10015/10015328.png"
         alt="Create A Playlist"
         id="addPlaylistImg"
-        style="cursor: pointer;"
       />
     </div>
-    
-    <!-- Playlist Modal -->
+    <div class="show-all-btn">
+      <!-- <form action="/playlists" method="GET"> -->
+        <button type="submit">Show All Playlists</button>
+      <!-- </form> -->
+    </div>
+  </div>
+
+   <!-- Playlist Modal -->
     <div id="playlistModal" class="modal">
       <div class="modal-content">
         <span id="closeModal" class="close">&times;</span>
-        <form id="playlistForm">
+        <form id="playlistForm" action="/create/add" method="POST">
           <label for="playlistName">Playlist Name:</label>
           <input type="text" id="playlistName" name="playlistName" required />
     
@@ -67,7 +77,7 @@
       };
     
       // AJAX Form Submission
-      const form = document.getElementById("playlistForm");
+      /*const form = document.getElementById("playlistForm");
       form.onsubmit = async function (e) {
         e.preventDefault();
         const formData = new FormData(form);
@@ -90,10 +100,11 @@
         } else {
           alert("Error creating playlist.");
         }
-      };
+      }; */
     </script>
-        
-    <div class="show-all-btn">
+    
+    <!-- <div class="show-all-btn">
       <button>Show All Playlists</button>
-    </div>
+    </div> -->
 </header>
+

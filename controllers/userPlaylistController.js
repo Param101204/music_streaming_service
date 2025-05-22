@@ -12,19 +12,23 @@ export const renderUserPlaylist = async(req, res) => {
     const default_image = "https://img.freepik.com/free-vector/futuristic-gradient-profile-picture_742173-9236.jpg?t=st=1729619249~exp=1729622849~hmac=55667e6b0eeba43d3bf64403680e0b83acda9e20e4f86ec7b91d78cb56808cc4&w=740"
 
     try {
-        const playlists = await getUserPlaylists(req.session.user_id);
+        // const playlists = await getUserPlaylists(req.session.user_id);
         const playlist = await getUserPlaylist(req.session.user_id, playlistName);
+        // console.log(playlist);
         const map = new Map();
         if(playlist.length === 0) {
+            console.log("Empty Playlist")
             res.render('playlists.ejs', {data: map, len: 0, username: req.session.username, playlistImage: default_image})
         } else {
             const song_ids = await getSongsFromUserPlaylist(playlist[0].playlist_id, playlistName);
+            console.log(song_ids);
             const songs = []
-            for (const song_id of song_ids) {
+            for (const songId of song_ids) {
                 // console.log(song_id.song_id);
-                const query = await getSongsById(song_id.song_id);
+                const query = await getSongsById(songId.song_id);
                 songs.push(query); 
             }
+            
             // console.log(songs.flat());
             const songs_ = songs.flat();
             for ( var i = 0 ; i < songs_.length; i ++ ) {
@@ -43,9 +47,10 @@ export const renderUserPlaylist = async(req, res) => {
                     map.set(curr_id, {song_name : curr.track_name, album_name: curr.album_name, genre: curr.genre, spotify_code: curr.track_id, album_name: curr.album_name, duration: curr.duration, rating: curr.rating, artist: artists_, image: imageToSend})
                 }    
             }
-            res.render('userPlaylists.ejs', {playlists: playlists, data: map, len: map.size, userId:req.session.user_id, username: req.session.username, playlistImage: default_image, playlistName: playlistName, countOfSongs: songs_.length, playlistID: playlist[0].playlist_id, creatorId: playlist[0].user_id/*, countOfSongs: playlist[0].count_of_songs, /*duration: playlist[0].duration*/});
+            // console.log(map)
+            res.render('userPlaylists.ejs', {playlists: playlist, data: map, len: map.size, userId:req.session.user_id, username: req.session.username, playlistImage: default_image, playlistName: playlistName, countOfSongs: songs_.length, playlistID: playlist[0].playlist_id, creatorId: playlist[0].user_id/*, countOfSongs: playlist[0].count_of_songs, /*duration: playlist[0].duration*/});
             // console.log(playlist[0].playlist_id) 
-            console.log(playlist[0].user_id) 
+            // console.log(playlist[0].user_id) 
         }
     } catch (err) {
         console.log(err);

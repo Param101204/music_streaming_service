@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spotify Clone</title>
+  <title>Topsify | Home</title>
   <link rel="stylesheet" href="/styles/styles.css">
 </head>
 <body>
@@ -22,7 +22,7 @@
           <% const default_image = 'https://img.freepik.com/free-vector/futuristic-gradient-profile-picture_742173-9236.jpg?t=st=1729619249~exp=1729622849~hmac=55667e6b0eeba43d3bf64403680e0b83acda9e20e4f86ec7b91d78cb56808cc4&w=740'%>
           <% playlists.forEach(playlist => { %>
             <div class="card">
-              <% const absoluteURL = 'http://topsify.onrender.com/user-playlists/'%>
+              <% const absoluteURL = 'https://topsify.onrender.com/user-playlists/'%>
               <% const relativeURL = absoluteURL + playlist.playlist_name %>
               <a href = "<%= relativeURL %>">
                 <img src="<%= default_image %>" alt="Playlist 1">
@@ -91,10 +91,10 @@
           <p>Autumn Vibes 2022</p>
         </div>
         <div class="card">
-          <a href = "http://topsify.onrender.com/playlists/Cigarettes%20After%20Sex">
+          <a href = "http://topsify.onrender.com/playlists/M.S.Dhoni%20-%20The%20Untold%20Story">
           <img src="https://img.freepik.com/free-vector/futuristic-gradient-profile-picture_742173-9236.jpg?t=st=1729619249~exp=1729622849~hmac=55667e6b0eeba43d3bf64403680e0b83acda9e20e4f86ec7b91d78cb56808cc4&w=740" alt="Album 2">
           </a>
-          <p>Cigarettes After Sex</p>
+          <p>M.S.Dhoni - The Untold Story</p>
         </div>
         <div class="card">
           <a href = "http://topsify.onrender.com/playlists/Love%20Aaj%20Kal%20%28Original%20Motion%20Picture%20Soundtrack%29">

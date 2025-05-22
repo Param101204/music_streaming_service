@@ -18,7 +18,7 @@ export const getPlaylistsByName = async (name) => {
         .ilike('playlist_name', `%${name}%`);
 
     if (error) throw error;
-    return data;
+    return data;                                
 };
 
 export const createUserPlaylist = async (id, name) => {
@@ -27,7 +27,13 @@ export const createUserPlaylist = async (id, name) => {
         .insert([
             { creator_id: id, playlist_name: name }
         ]);
-
     if (error) throw error;
+    // console.log(data)
+    const {data1, error1 } = await db
+        .from('user_playlists')
+        .insert([
+            { user_id: id, playlist_name: name}
+        ]);
+    if (error1) throw error1;
     return data;
 };

@@ -29,7 +29,7 @@ export const getSongsByArtist = async (artist) => {
         .ilike('song_artists', `${artist}`);
 
     if (artistError) throw artistError;
-    console.log(artistData);
+    // console.log(artistData);
     const songIds = artistData.map(row => row.song_id);
     // console.log(songIds);
     if (songIds.length === 0) return [];
@@ -40,13 +40,23 @@ export const getSongsByArtist = async (artist) => {
         .in('song_id', songIds);
 
     if (error) throw error;
-    console.log(data)
+    // console.log(data)
     return data;
 };
 
 export const getSongsByAlbum = async (album) => {
     const { data, error } = await db.from('songs').select('*').ilike('album_name', `${album}`);
     if (error) throw error;
-    console.log(data)
+    // console.log(data)
     return data;
 };
+
+export const getSongsByName = async(songName) => {
+    const { data, error } = await db
+        .from('songs')
+        .select('*')
+        .ilike('track_name', `%${songName}%`);
+
+    if (error) throw error;
+    return data;
+}

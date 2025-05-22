@@ -23,6 +23,6 @@ export const loginController = async (req, res) => {
 
     } catch (err) {
         console.error('Error with database query:', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send('Internal Server Error. Check your network connection.');
     }
 };
