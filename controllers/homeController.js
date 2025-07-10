@@ -1,10 +1,10 @@
-import { getPlaylists } from "../models/playlistModel.js";
+import { getPlaylistsByCreator } from "../models/playlistModel.js";
 
 export const renderHome = async(req, res) => {
     if (!req.session.username) {
         return res.redirect('/login'); // Redirect to login if session data is missing
     }
-    const userPlaylists = await getPlaylists(req.session.user_id);
+    const userPlaylists = await getPlaylistsByCreator(req.session.user_id);
     res.render('index.ejs', {username: req.session.username, playlists: userPlaylists})
 }
 

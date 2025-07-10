@@ -10,32 +10,30 @@ export const getArtists = async (artist_name) => {
     return data;
 };
 
-export const getArtistsByID = async (id) => {
+export const getArtistsByTrackId = async (track_id) => {
     const { data, error } = await db
-        .from('artists')
-        .select('song_artists, artists_images')
-        .eq('song_id', id);
+        .from('song_artists')
+        .select('artist_id')
+        .eq('track_id', track_id);
 
     if (error) throw error;
-    return data;
-};
+    const artistIds = data.map(row => row.artist_id);
+    if (artistIds.length === 0) return [];
 
-// Same as getArtistsByID
-export const getArtistsBySongId = async (id) => {
-    const { data, error } = await db
+    const { data: artistData, error: error2 } = await db
         .from('artists')
-        .select('song_artists, artists_images')
-        .eq('song_id', id);
+        .select('artist_name, artist_image')
+        .in('artist_id', artistIds);
 
-    if (error) throw error;
-    return data;
+    if (error2) throw error2;
+    return artistData;
 };
 
 export const getArtistImage = async (artist_name) => {
     const { data, error } = await db
         .from('artists')
-        .select('artists_images')
-        .ilike('song_artists', `%${artist_name}%`);
+        .select('artist_image')
+        .ilike('artist_name', `%${artist_name}%`);
 
     if (error) throw error;
     return data;

@@ -1,5 +1,5 @@
-import { getSongs, getArtists } from "../models/songModel.js";
-import { getArtistsByTrackId } from "../models/artistModel.js";
+import { getSongs } from "../models/songModel.js";
+import { getArtistsByTrackId, getArtists } from "../models/artistModel.js";
 import { getPlaylistsByCreator } from "../models/playlistModel.js";
 
 export const renderSearch = (req, res) => {

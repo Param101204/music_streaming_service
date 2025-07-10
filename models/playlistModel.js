@@ -1,39 +1,46 @@
-// playlistService.js
 import db from './db.js';
 
-export const getPlaylists = async (creator_id) => {
+export const getPlaylistsByCreator = async (user_id) => {
     const { data, error } = await db
         .from('playlists')
         .select('*')
-        .eq('creator_id', creator_id);
+        .eq('creator_id', user_id);
 
     if (error) throw error;
     return data;
 };
 
-export const getPlaylistsByName = async (name) => {
+export const getPlaylistById = async (playlist_id) => {
     const { data, error } = await db
         .from('playlists')
         .select('*')
-        .ilike('playlist_name', `%${name}%`);
+        .eq('playlist_id', playlist_id)
+        .single(); // Assuming 1 row expected
 
     if (error) throw error;
-    return data;                                
+    return data;
 };
 
-export const createUserPlaylist = async (id, name) => {
+export const createUserPlaylist = async (user_id, name) => {
     const { data, error } = await db
         .from('playlists')
         .insert([
-            { creator_id: id, playlist_name: name }
-        ]);
+            { creator_id: user_id, playlist_name: name }
+        ])
+        .select(); // So we get back inserted playlist_id
+
     if (error) throw error;
-    // console.log(data)
-    const {data1, error1 } = await db
+
+    const playlist_id = data[0].playlist_id;
+
+    // Optional: Store in user_playlists only if needed for sharing
+    const { error: error2 } = await db
         .from('user_playlists')
         .insert([
-            { user_id: id, playlist_name: name}
+            { user_id: user_id, playlist_id: playlist_id }
         ]);
-    if (error1) throw error1;
+
+    if (error2) throw error2;
+
     return data;
 };
