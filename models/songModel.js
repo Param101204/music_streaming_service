@@ -1,57 +1,63 @@
-// songService.js
 import db from './db.js';
 
 export const getSongs = async (song_name, album_name) => {
     const { data, error } = await db
         .from('songs')
-        .select('song_id, track_id, track_name, album_name, duration, rating, genre')
+        .select('track_id, track_name, album_name, duration, rating')
         .or(`track_name.ilike.%${song_name}%,album_name.ilike.%${album_name}%`);
 
     if (error) throw error;
     return data;
 };
 
-export const getSongsById = async (id) => {
+export const getSongsById = async (track_id) => {
     const { data, error } = await db
         .from('songs')
         .select('*')
-        .eq('song_id', id);
+        .eq('track_id', track_id);
 
     if (error) throw error;
     return data;
 };
 
 export const getSongsByArtist = async (artist) => {
-    // First, get song_ids from artists table
     const { data: artistData, error: artistError } = await db
         .from('artists')
-        .select('song_id')
-        .ilike('song_artists', `%${artist}%`);
+        .select('artist_id')
+        .ilike('artist_name', `%${artist}%`);
 
     if (artistError) throw artistError;
-    // console.log(artistData);
-    const songIds = artistData.map(row => row.song_id);
-    // console.log(songIds);
-    if (songIds.length === 0) return [];
+    const artistIds = artistData.map(row => row.artist_id);
+    if (artistIds.length === 0) return [];
 
     const { data, error } = await db
-        .from('songs')
-        .select('*')
-        .in('song_id', songIds);
+        .from('song_artists')
+        .select('track_id')
+        .in('artist_id', artistIds);
 
     if (error) throw error;
-    // console.log(data)
-    return data;
+    const trackIds = data.map(d => d.track_id);
+    if (trackIds.length === 0) return [];
+
+    const songs = await db
+        .from('songs')
+        .select('*')
+        .in('track_id', trackIds);
+
+    return songs.data;
 };
 
 export const getSongsByAlbum = async (album) => {
-    const { data, error } = await db.from('songs').select('*').ilike('album_name', `%${album}%`);
+    const { data, error } = await db
+        .from('songs')
+        .select('*')
+        .ilike('album_name', `%${album}%`);
+
     if (error) throw error;
-    // console.log(data)
     return data;
 };
 
-export const getSongsByName = async(songName) => {
+export const getSongsByName = async (songName) => {
     const { data, error } = await db
         .from('songs')
         .select('*')
@@ -59,4 +65,4 @@ export const getSongsByName = async(songName) => {
 
     if (error) throw error;
     return data;
-}
+};

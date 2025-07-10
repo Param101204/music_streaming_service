@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Topsify | User</title>
+  <link rel="stylesheet" href="/styles/styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Search Bar, Title, and Show All Playlists Button -->
+    <%- include('partials/header.ejs') %>
+    
+    <!-- User playlists -->
+    <div class="artists">
+      <% if (locals.playlists.length === 0) { %>
+       <h2> You don't have any Playlists. </h2>
+      <% } else { %>
+        <h2>Your Playlists</h2>
+        <div class="grid">
+          <% const len = playlists.length %>
+          <% const default_image = 'https://img.freepik.com/free-vector/futuristic-gradient-profile-picture_742173-9236.jpg?t=st=1729619249~exp=1729622849~hmac=55667e6b0eeba43d3bf64403680e0b83acda9e20e4f86ec7b91d78cb56808cc4&w=740'%>
+          <% playlists.forEach(playlist => { %>
+            <div class="card">
+              <% const absoluteURL = 'https://topsify.onrender.com/user-playlists/'%>
+              <% const relativeURL = absoluteURL + playlist.playlist_name %>
+              <a href = "<%= relativeURL %>">
+                <img src="<%= default_image %>" alt="Playlist 1">
+              </a>
+              <p><%= playlist.playlist_name  %></p>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="artists">
+      <% if (locals.saved_playlists.length === 0) { %>
+       <h2> You don't have any Saved Playlists. </h2>
+      <% } else { %>
+        <h2>Your Saved Playlists</h2>
+        <div class="grid">
+          <% const len = saved_playlists.length %>
+          <% const default_image = 'https://img.freepik.com/free-vector/futuristic-gradient-profile-picture_742173-9236.jpg?t=st=1729619249~exp=1729622849~hmac=55667e6b0eeba43d3bf64403680e0b83acda9e20e4f86ec7b91d78cb56808cc4&w=740'%>
+          <% saved_playlists.forEach(playlist => { %>
+            <div class="card">
+              <% const absoluteURL = 'https://topsify.onrender.com/user-playlists/'%>
+              <% const relativeURL = absoluteURL + playlist.playlist_name %>
+              <a href = "<%= relativeURL %>">
+                <img src="<%= default_image %>" alt="Playlist 1">
+              </a>
+              <p><%= playlist.playlist_name  %></p>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+      <!-- Include Footer -->
+  <%- include('partials/footer.ejs') %>
+</body>
+</html>

@@ -1,233 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Topsify | Playlists</title>
-  <link rel="stylesheet" href="/styles/search_style.css">
-</head>
-<body>
-  <div class="container">
-    <!-- Search Bar, Title, and Show All Playlists Button -->
-    <%- include('partials/header.ejs') %>
-    <div class="title">
-        <% if (locals.len === 0 ) { %>
-            <% if (locals.creatorId != locals.userId) { %>
-                No Such Playlist Exists.
-            <% } else { %>
-                Your Playlist is Empty. Add some songs!
-            <% } %>
-        <% } else { %>
+<!DOCTYPE html><html lang="en"><head>...<link rel="stylesheet" href="/styles/search_style.css"></head><body>
+<%- include('partials/header.ejs') %>
 
-            <div class="artist-info">
-                <img src="<%= playlistImage %>" alt="Playlist's Image">
-                <p class = "album-title"><%= playlistName %></p>
-                <% const parsed = JSON.parse(JSON.stringify(duration)) %>
-                <% let hours = parsed.hours !== undefined ? parsed.hours : 0; %>
-                <% let minutes = parsed.minutes !== undefined ? parsed.minutes : 0; %>
-                <% let seconds = parsed.seconds !== undefined ? parsed.seconds : 0; %>
-
-                <% let formattedHours = hours.toString().padStart(2, '0'); %>
-                <% let formattedMinutes = minutes.toString().padStart(2, '0'); %>
-                <% let formattedSeconds = seconds.toString().padStart(2, '0'); %>
-                <br>
-                
-                <br>
-                <p class = "countSongs"> Total Songs: <%= countOfSongs %> </p>
-            </div>
-        <% } %>
+<div class="title">
+  <% if (len === 0) { %>
+    <%= creatorId !== userId ? 'No Such Playlist Exists.' : 'Your Playlist is Empty.' %>
+  <% } else { %>
+    <div class="playlist-info">
+      <img src="<%= playlistImage || '/default_playlist.jpg' %>">
+      <p class="album-title"><%= playlistName %></p>
+      <p>Total Songs: <%= len %></p>
     </div>
-    <%# console.log(data) %>
-    <div class="grid-container">
-        <!--  -->
-        <div class="grid-item text-column">
-            S. No.
-        </div>
-        <!-- track name -->
-        <div class="grid-item text-column">
-            Song Details
-        </div>
-        <!-- Album Details -->
-        <div class="grid-item text-column">
-            Album Name
-        </div>
-        <!-- Genre -->
-        <div class="grid-item text-column">
-            Genre
-        </div>
-        <!-- duration -->
-        <div class="grid-item text-column">
-            Duration
-        </div>
-        <!-- add to playlist/ spotify link -->
-        <div class="grid-item text-column">
-            Add to Playlist
-        </div>
-        <% i = 1 %>
-        <% data.forEach((keys, values) => { %>
-            <%# if (keys.artists) { %>
-            <%# console.log(values) %>
-            <!-- S No and image -->
-            <div class="grid-item">
-                <div class="grid-item text-column">
-                    <p> <%= i %></p> 
-                    <% i += 1 %>
-                </div>
-                <div class="grid-item">
-                    <img src="<%= keys.image %>" alt="Image" />
-                </div>
-            </div>
-            <!-- track name -->
-            <div class="grid-item text-column">
-                <p id="song-name" class="song-column"><%= keys.song_name %></p>
-                <p class="song-column artist-container">
-                    By-
-                    <% for (var j = 0; j < keys.artist.length; j++) { %>
-                        <% if (j < 2) { %> <!-- Show only first 2 artists -->
-                            <a href="https://topsify.onrender.com/artists/<%= encodeURIComponent(keys.artist[j]) %>" class="artist-name">
-                                <%= keys.artist[j] %>
-                            </a>
-                            <% if (j === 0 && keys.artist.length > 1) { %>, <% } %> <!-- Add comma after first artist -->
-                        <% } else if (j === 2) { %> <!-- Handle ellipsis only once -->
-                            <span class="hidden-artist">...</span>
-                        <% } %>
-                    <% } %>
-                    <% if (keys.artist.length > 2) { %>
-                        <span class="hidden-artist-full">
-                            <% for (var k = 2; k < keys.artist.length; k++) { %>
-                                , <a href="https://topsify.onrender.com/artists/<%= encodeURIComponent(keys.artist[k]) %>" class="artist-name">
-                                    <%= keys.artist[k] %>
-                                </a>
-                            <% } %>
-                        </span>
-                    <% } %>
-                </p>
-            </div>
-            <!-- Album name -->
-            <div class="grid-item text-column">
-                <p class = "grid-item song-column"> <%= keys.album_name%> </p>
-            </div>
-            <!-- Genre -->
-            <div class="grid-item text-column">
-                <p> <%= keys.genre %></p>
-            </div>
-            <!-- duration -->
-            <div class="grid-item text-column">
-                <p> <%= keys.duration %></p>
-            </div>
-   <!-- Add to Playlist & Spotify Link -->
-   <div class="grid-item">
-    <!-- Add Button -->
-    <button class="add-button" data-modal-target="playlistModal-<%= i %>" id = "<%= values %>">
-      <img src="https://cdn-icons-png.flaticon.com/128/992/992651.png" class="add-button-icon">
-    </button>
-
-    <!-- Playlist Modal -->
-    <div id="playlistModal-<%= i %>" class="modal" style="display: none;">
-      <div class="modal-content">
-        <span class="close" data-modal-close>&times;</span>
-        <form id="playlistForm-<%= i %>">
-          <label>Add to Playlist:</label>
-          <div class="checkbox-container">
-            <% playlists.forEach(playlist => { %>
-              <div>
-                <input type="checkbox" id="playlist-<%= playlist.playlist_id %>-<%= i %>" 
-                       name="playlists" value="<%= playlist.playlist_id %>">
-                <label for="<%= playlist.playlist_name %>">
-                  <%= playlist.playlist_name %>
-                </label>
-              </div>
-            <% }) %>
-          </div>
-          <button type="submit">Add to Selected Playlists</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Spotify Link -->
-    <a href="https://open.spotify.com/track/<%= keys.spotify_code %>" class="spotify-link">
-      <img src="https://developer.spotify.com/images/guidelines/design/icon3.svg" 
-           alt="Spotify Icon" class="spotify-icon">
-    </a>
-  </div>
-<% }) %>
+  <% } %>
 </div>
+
+<div class="grid-container">
+  <div class="grid-item">S. No.</div><div class="grid-item">Song</div><div class="grid-item">Album</div><div class="grid-item">Duration</div><div class="grid-item">Actions</div>
+  <% let i = 1; %>
+  <% data.forEach((item, trackId) => { %>
+    <div class="grid-item"><p><%= i++ %></p></div>
+    <div class="grid-item"><p><%= item.song_name %></p></div>
+    <div class="grid-item"><p><%= item.album_name %></p></div>
+    <div class="grid-item"><p><%= item.duration %></p></div>
+    <div class="grid-item">
+      <a href="https://open.spotify.com/track/<%= trackId %>"><img src="spotify-icon.svg"></a>
+      <button class="del-button" data-track="<%= trackId %>" data-playlist="<%= playlistID %>">Delete</button>
+    </div>
+  <% }) %>
 </div>
 
 <%- include('partials/footer.ejs') %>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-const openButtons = document.querySelectorAll('[data-modal-target]');
-const closeButtons = document.querySelectorAll('[data-modal-close]');
-
-openButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const modalId = button.getAttribute('data-modal-target');
-    document.getElementById(modalId).style.display = 'block';
-  });
-});
-
-closeButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    button.closest('.modal').style.display = 'none';
-  });
-});
-
-window.onclick = event => {
-  if (event.target.classList.contains('modal')) {
-    event.target.style.display = 'none';
-  }
-};
-
-document.querySelectorAll('[id^="playlistForm-"]').forEach(form => {
-  form.addEventListener('submit', async event => {
-    event.preventDefault();
-
-    const modal = form.closest('.modal');
-    const button = document.querySelector(`button[data-modal-target="${modal.id}"]`);
-    const songId = button.id;
-
-    console.log("Form ID:", form.id);
-    console.log("Modal ID:", modal.id);
-    console.log("Button for modal:", button);
-
-    const selectedPlaylists = Array.from(form.querySelectorAll('input[name="playlists"]:checked'))
-      .map(checkbox => {
-        console.log("Checkbox:", checkbox);
-        const playlistId = checkbox.value;
-        const playlistName = checkbox.nextElementSibling.textContent.trim();
-        return { playlist_id: playlistId, playlist_name: playlistName };
-      });
-
-    //console.log("Selected Playlists:", selectedPlaylists);
-
-    const payload = {
-      song_id: songId,
-      playlists: selectedPlaylists
-    };
-    console.log("Prepared Payload:", payload);
-
-    try {
-      const response = fetch('/add-to-playlists', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      })
-
-      alert("Song successfully added to playlists!");
-    } 
-    catch (error) {
-      console.error("Fetch error:", error);
-      alert("Song Already exists in the playlist.");
-  }
-
-    modal.style.display = 'none';
-  });
-});
-});      
-</script>
-</body>
-</html>
+<script src="/js/delete-song.js"></script>
+</body></html>

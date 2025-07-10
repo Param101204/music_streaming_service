@@ -4,7 +4,7 @@ export const getArtists = async (artist_name) => {
     const { data, error } = await db
         .from('artists')
         .select('*')
-        .ilike('song_artists', `%${artist_name}%`);
+        .ilike('artist_name', `${artist_name}%`);
 
     if (error) throw error;
     return data;

@@ -1,14 +1,14 @@
 // playlistSongService.js
 import db from "./db.js";
 
-export const insertSongsToPlaylist = async (playlist_id, playlist_name, song_id) => {
+// Insert song into playlist
+export const insertSongsToPlaylist = async (playlist_id, track_id) => {
     const { data, error } = await db
         .from('playlist_songs')
         .insert([
             {
                 playlist_id: playlist_id,
-                playlist_name: playlist_name,
-                song_id: song_id
+                track_id: track_id
             }
         ]);
 
@@ -16,6 +16,7 @@ export const insertSongsToPlaylist = async (playlist_id, playlist_name, song_id)
     return data;
 };
 
+// Get all user playlists with given name
 export const getUserPlaylist = async (user_id, playlist_name) => {
     const { data, error } = await db
         .from('user_playlists')
@@ -27,23 +28,24 @@ export const getUserPlaylist = async (user_id, playlist_name) => {
     return data;
 };
 
-export const getSongsFromUserPlaylist = async (playlist_id, playlist_name) => {
+// Get all song track_ids in playlist
+export const getSongsFromUserPlaylist = async (playlist_id) => {
     const { data, error } = await db
         .from('playlist_songs')
-        .select('song_id')
-        .eq('playlist_id', playlist_id)
-        .eq('playlist_name', playlist_name);
+        .select('track_id')
+        .eq('playlist_id', playlist_id);
 
     if (error) throw error;
     return data;
 };
 
-export const deleteSong = async (playlist_id, song_id) => {
+// Delete a song from playlist
+export const deleteSong = async (playlist_id, track_id) => {
     const { data, error } = await db
         .from('playlist_songs')
         .delete()
         .eq('playlist_id', playlist_id)
-        .eq('song_id', song_id);
+        .eq('track_id', track_id);
 
     if (error) throw error;
     return data;
