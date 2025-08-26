@@ -1,0 +1,111 @@
+<!-- header.ejs -->
+<header class="header-bar">
+  <!-- Group 1: Home + Search -->
+  <div class="header-left">
+    <div class="home-btn">
+      <a href="http://localhost:3000/home">
+        <img src="https://cdn-icons-png.flaticon.com/128/14035/14035684.png" alt="Home" />
+      </a>
+    </div>
+    <form method="POST" class="search-form">
+      <input type="text" name="search" placeholder="Search" />
+    </form>
+  </div>
+
+  <!-- Group 2: Welcome Message -->
+  <div class="header-center">
+    <% if (locals.username) { %>
+      <h3>Welcome <%= username %>, to Topsify</h3>
+    <% } %>
+  </div>
+
+  <!-- Group 3: Create Playlist + Show All -->
+  <div class="header-right">
+    <div class="add-btn">
+      <img
+        src="https://cdn-icons-png.flaticon.com/128/10015/10015328.png"
+        alt="Create A Playlist"
+        id="addPlaylistImg"
+      />
+    </div>
+    <div class="add-btn">
+      <a href = "http://localhost:3000/logout">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/6711/6711560.png"
+          alt="LOGOUT"
+          id="addPlaylistImg"
+        />
+      </a>
+    </div>
+    <div class="add-btn">
+      <% var userName = username; %>
+      <% var url = "http://localhost:3000/u/" + userName; %>
+      <a href = "<%=url%>">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/5582/5582872.png"
+          alt="User Profile"
+          id="addPlaylistImg"
+        />
+      </a>
+    </div>
+  </div>
+
+   <!-- Playlist Modal -->
+    <div id="playlistModal" class="modal">
+      <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <form id="playlistForm">
+          <label for="playlistName">Playlist Name:</label>
+          <input type="text" id="playlistName" name="playlistName" required />
+          <button type="submit">Create Playlist</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      const modal = document.getElementById("playlistModal");
+      const img = document.getElementById("addPlaylistImg");
+      const close = document.getElementById("closeModal");
+
+      img.onclick = function () {
+        modal.style.display = "block";
+      };
+
+      close.onclick = function () {
+        modal.style.display = "none";
+      };
+
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+
+      // AJAX Form Submission
+      const form = document.getElementById("playlistForm");
+      form.onsubmit = async function (e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const formObject = {};
+        formData.forEach((value, key) => {
+          formObject[key] = value;
+        });
+
+        console.log("Form data:", formObject);
+        const response = await fetch("/create/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(formObject),
+        });
+
+        if (response.ok) {
+          alert("Playlist created successfully!");
+          modal.style.display = "none";
+        } else {
+          console.error("Error creating playlist:", response.statusText);
+          alert("Error creating playlist.");
+        }
+      };
+    </script>
+</header>

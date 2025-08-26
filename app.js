@@ -16,6 +16,9 @@ import userDeletesSongsRoute from './routes/userDeletesSongsRoute.js';
 import searchByArtistRoute from './routes/searchByArtistRoute.js';
 import searchByNameRoute from './routes/searchByNameRoute.js';
 import searchByAlbumRoute from './routes/searchByAlbumRoute.js';
+import logoutRoute from './routes/logoutRoute.js';
+import userRoute from './routes/userRoute.js';
+import userSavesPlaylistRoute from './routes/userSavesPlaylistRoute.js';
 // import searchByGenreRoute from './routes/searchByGenreRoute.js';
 
 const app = express();
@@ -32,12 +35,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 // session
+
 app.use(session({secret: "SECRET",resave: false,saveUninitialized: true,cookie : {maxAge: 1000 * 60 * 60 * 24,},}));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', (req, res) => {res.render('login_signup2.ejs')});
+app.get('/', (req, res) => {res.render('login.ejs')});
 app.use("/signup", signupRoute);
 app.use("/login", loginRoute);
 app.use('/home', homeRoute);
@@ -51,5 +55,7 @@ app.use('/deleteSong', userDeletesSongsRoute);
 app.use('/search-by-artist', searchByArtistRoute);
 app.use('/search-by-song', searchByNameRoute);
 app.use('/search-by-album', searchByAlbumRoute);
-// app.use('/search-by-genre', searchByGenreRoute);
+app.use('/logout', logoutRoute);
+app.use('/u', userRoute);
+app.use('/user-saves-playlist', userSavesPlaylistRoute);
 app.listen(port, () => {console.log(`Server running on http://localhost:${port}`);});

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Topsify | Search</title>
+  <link rel="stylesheet" href="/styles/search_style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <%- include('partials/header.ejs') %>
+    
+    <!-- Search Title -->
+    <div class="title">
+      <% if (len === 0) { %>
+        No Items Match Your Search.
+      <% } else { %>
+        <%= len %> Results matched your Search.
+        <% if (len > 100) { %>
+            Showing Top 100 of them.
+        <% } %>
+      <% } %>
+    </div>
+    <% const artistURL = "http://localhost:3000/search-by-artist/" %>
+    <% const albumURL = "http://localhost:3000/search-by-album/" %>
+    <% const songURL = "http://localhost:3000/search-by-song/" %>
+    <div class="search">
+      <div class="search-item">
+        <% console.log(locals.query) %>
+        <a href = "<%= artistURL + encodeURIComponent(query) %>">
+          <button class ="search-button">Filter by Artist</button>
+        </a>
+      </div>
+    <div class="search-item">
+        <a href = "<%= albumURL + encodeURIComponent(query) %>">
+          <button class ="search-button">Filter by Album</button>
+        </a>
+      </div>
+      <div class="search-item">
+        <a href = "<%= songURL + encodeURIComponent(query) %>">
+          <button class ="search-button">Filter by Song Name</button>
+        </a>
+      </div>
+    </div>
+    <!-- Grid Content -->
+    <div class="grid-container">
+      <!-- Column Headers -->
+      <div class="grid-item text-column">S. No.</div>
+      <div class="grid-item text-column">Song Details</div>
+      <div class="grid-item text-column">Album Name</div>
+      <!-- <div class="grid-item text-column">Genre</div> -->
+      <div class="grid-item text-column">Duration</div>
+      <div class="grid-item text-column">Add to Playlist</div>
+
+      <!-- Data Rows -->
+      <% let i = 1; %>
+      <% const song_ids = [] %>
+      <% data.forEach((keys, values) => { %>
+        <!-- Serial No and Image -->
+         <% if (i <= 100) { %>
+         
+         <% song_ids.push(values) %>
+         <%# console.log(values) %>
+        <div class="grid-item text-column">
+          <p><%= i++ %></p>
+          <img src="<%= keys.image %>" alt="Song Image" />
+        </div>
+
+        <!-- Song Name and Artists -->
+        <div class="grid-item text-column">
+          <p id="song-name" class="song-column"><%= keys.song_name %></p>
+          <p class="song-column artist-container">
+            By:
+            <% keys.artist.slice(0, 2).forEach((artist, idx) => { %>
+              <a href="/artists/<%= encodeURIComponent(artist) %>" class="artist-name">
+                <%= artist %>
+              </a>
+              <% if (idx === 0 && keys.artist.length > 1) { %>, <% } %>
+            <% }) %>
+            <% if (keys.artist.length > 2) { %>
+              <span class="hidden-artist">...</span>
+              <span class="hidden-artist-full">
+                <% keys.artist.slice(2).forEach(artist => { %>
+                  , <a href="/artists/<%= encodeURIComponent(artist) %>" class="artist-name">
+                    <%= artist %>
+                  </a>
+                <% }) %>
+              </span>
+            <% } %>
+          </p>
+        </div>
+
+        <!-- Album Name -->
+        <div class="grid-item text-column">
+          <a href="/playlists/<%= encodeURIComponent(keys.album_name) %>">
+            <p class="grid-item song-column"><%= keys.album_name %></p>
+          </a>
+        </div>
+
+        <!-- Genre -->
+        <!-- <div class="grid-item text-column">
+          <p><%= keys.genre %></p>
+        </div> -->
+
+        <!-- Duration -->
+        <div class="grid-item text-column">
+          <%= keys.duration %>
+          <!-- <p></p> -->
+        </div>
+
+        <!-- Add to Playlist & Spotify Link -->
+        <div class="grid-item">
+          <!-- Add Button -->
+          <button class="add-button" data-modal-target="playlistModal-<%= i %>" id="<%= values %>">
+            <img src="https://cdn-icons-png.flaticon.com/128/992/992651.png" class="add-button-icon">
+          </button>
+
+          <!-- Playlist Modal -->
+          <div id="playlistModal-<%= i %>" class="modal" style="display: none;">
+            <div class="modal-content">
+              <span class="close" data-modal-close>&times;</span>
+              <form id="playlistForm-<%= i %>">
+                <label>Add to Playlist:</label>
+                <div class="checkbox-container">
+                  <% playlists.forEach(playlist => { %>
+                    <div>
+                      <input type="checkbox" id="playlist-<%= playlist.playlist_id %>-<%= i %>" 
+                             name="playlists" value="<%= playlist.playlist_id %>">
+                      <label for="<%= playlist.playlist_name %>">
+                        <%= playlist.playlist_name %>
+                      </label>
+                    </div>
+                  <% }) %>
+                </div>
+                <button type="submit">Add to Selected Playlists</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Spotify Link -->
+          <a href="https://open.spotify.com/track/<%= keys.spotify_code %>" class="spotify-link">
+            <img src="https://developer.spotify.com/images/guidelines/design/icon3.svg" 
+                 alt="Spotify Icon" class="spotify-icon">
+          </a>
+        </div>
+        <% } %>
+      <% }) %>
+
+    </div>
+  </div>
+
+  <%- include('partials/footer.ejs') %>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const openButtons = document.querySelectorAll('[data-modal-target]');
+      const closeButtons = document.querySelectorAll('[data-modal-close]');
+    
+      openButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const modalId = button.getAttribute('data-modal-target');
+          document.getElementById(modalId).style.display = 'block';
+        });
+      });
+    
+      closeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          button.closest('.modal').style.display = 'none';
+        });
+      });
+    
+      window.onclick = event => {
+        if (event.target.classList.contains('modal')) {
+          event.target.style.display = 'none';
+        }
+      };
+    
+      document.querySelectorAll('[id^="playlistForm-"]').forEach(form => {
+        form.addEventListener('submit', async event => {
+          event.preventDefault();
+      
+          const modal = form.closest('.modal');
+          const button = document.querySelector(`button[data-modal-target="${modal.id}"]`);
+          const songId = button.id;
+      
+          console.log("Form ID:", form.id);
+          console.log("Modal ID:", modal.id);
+          console.log("Button for modal:", button);
+      
+          const selectedPlaylists = Array.from(form.querySelectorAll('input[name="playlists"]:checked'))
+            .map(checkbox => {
+              console.log("Checkbox:", checkbox);
+              const playlistId = checkbox.value;
+              const playlistName = checkbox.nextElementSibling.textContent.trim();
+              return { playlist_id: playlistId, playlist_name: playlistName };
+            });
+      
+          console.log("Selected Playlists:", selectedPlaylists);
+      
+          const payload = {
+            song_id: songId,
+            playlists: selectedPlaylists
+          };
+          console.log("Prepared Payload:", payload);
+      
+          try {
+            const response = await fetch('/add-to-playlists', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(payload)
+            });
+      
+            //const data = await response.json();
+            alert("Song successfully added to playlists!");
+          } catch (error) {
+            console.error("Fetch error:", error);
+            alert("An error occurred: " + error.message);
+          }
+      
+          modal.style.display = 'none';
+        });
+      });
+    });     
+    
+  </script>
+</body>
+</html>

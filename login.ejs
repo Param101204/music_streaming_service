@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/login_signup2.css">
+    <title>Login & Sign Up</title>
+    <style>
+        /* Updated Styling */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 900px;
+            max-width: 100%;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .form-container {
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-container h2 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #74ebd5;
+            box-shadow: 0 0 6px rgba(116, 235, 213, 0.4);
+        }
+
+        button {
+            padding: 12px 25px;
+            background: #74ebd5;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #5dc4b8;
+        }
+
+        .overlay-container {
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .overlay-container h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .overlay-container p {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .ghost {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ghost:hover {
+            background: white;
+            color: #74ebd5;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sign-In Form -->
+        <div class="form-container sign-in-container">
+            <form id="login-form" method="POST" action="/login">
+                <% if (!locals.message) { %>
+                    <h2>Login to Your Account</h2>
+                <% } else { %>
+                    <h2><%= message %></h2>
+                <% } %>
+                <div class="form-group">
+                    <label for="new-email">E-Mail:</label>
+                    <input type="email" id="new-email" name="email" required placeholder="xyz@mail.com">
+                </div>
+                <div class="form-group">
+                    <label for="new-password">Password:</label>
+                    <input type="password" id="new-password" name="password" required>
+                </div>
+                <button>Sign In</button>
+            </form>
+        </div>
+
+        <!-- Overlay Section -->
+        <div class="overlay-container">
+            <div>
+                <h1>Welcome Back!</h1>
+                <p>To keep connected with us, please login with your personal info</p>
+                <button class="ghost" id="signIn">Sign In</button>
+                <h1>Hello! New to Our App?</h1>
+                <p>Enter your personal details and start your journey with us</p>
+                <button class="ghost">
+                    <a href="/signup">Sign Up</a>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
